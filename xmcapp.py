@@ -67,9 +67,7 @@ if 'df' in st.session_state:
             with val_f:
                 valor = st.number_input(f"Valor {i+1}", key=f"valor_{i}")
             filtros.append((coluna, operador, valor))
-
-if 'df' in st.session_state:
-    df = st.session_state['df']
+            
     # Aplicar filtros
     df_filtrado = df.copy()
     for coluna, operador, valor in filtros:
