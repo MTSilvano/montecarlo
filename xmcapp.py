@@ -33,39 +33,41 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
 
-if 'df' in st.session_state:
-    df = st.session_state['df']
+    if 'df' in st.session_state:
+        df = st.session_state['df']
 
     # ========== Seleção do método ===========
-    metodos = [col for col in df.columns if "P/L" in col]
-    metodo = st.selectbox("🎯 Selecione o método para análise:", metodos)
-    retornos = df[metodo].dropna().values
+        metodos = [col for col in df.columns if "P/L" in col]
+        metodo = st.selectbox("🎯 Selecione o método para análise:", metodos)
+        retornos = df[metodo].dropna().values
 
     # ========== Configurações de simulação ===========
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        n_simulacoes = st.number_input("🔢 Número de Simulações", value=10000, step=1000)
-    with col2:
-        stake_pct = st.number_input("💰 Stake (% da banca)", value=1.0, step=0.1) / 100
-    with col3:
-        banca_inicial = st.number_input("🏦 Banca Inicial", value=1000, step=100)
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            n_simulacoes = st.number_input("🔢 Número de Simulações", value=10000, step=1000)
+        with col2:
+            stake_pct = st.number_input("💰 Stake (% da banca)", value=1.0, step=0.1) / 100
+        with col3:
+            banca_inicial = st.number_input("🏦 Banca Inicial", value=1000, step=100)
 
-    # ========== Filtros Dinâmicos ===========
-    filtros = []
-    colunas_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
+        # ========== Filtros Dinâmicos ===========
+        filtros = []
+        colunas_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
 
-    with st.expander("🛠️ Clique para adicionar filtros"):
-        n_filtros = st.number_input("Quantos filtros deseja aplicar?", min_value=0, max_value=10, value=0, step=1)
-        for i in range(n_filtros):
-            col_f, op_f, val_f = st.columns([4, 2, 4])
-            with col_f:
-                coluna = st.selectbox(f"Coluna {i+1}", colunas_numericas, key=f"coluna_{i}")
-            with op_f:
-                operador = st.selectbox(f"Operador {i+1}", ["<=", ">=", "=="], key=f"operador_{i}")
-            with val_f:
-                valor = st.number_input(f"Valor {i+1}", key=f"valor_{i}")
-            filtros.append((coluna, operador, valor))
+        with st.expander("🛠️ Clique para adicionar filtros"):
+            n_filtros = st.number_input("Quantos filtros deseja aplicar?", min_value=0, max_value=10, value=0, step=1)
+            for i in range(n_filtros):
+                col_f, op_f, val_f = st.columns([4, 2, 4])
+                with col_f:
+                    coluna = st.selectbox(f"Coluna {i+1}", colunas_numericas, key=f"coluna_{i}")
+                with op_f:
+                    operador = st.selectbox(f"Operador {i+1}", ["<=", ">=", "=="], key=f"operador_{i}")
+                with val_f:
+                    valor = st.number_input(f"Valor {i+1}", key=f"valor_{i}")
+                filtros.append((coluna, operador, valor))
 
+if 'df' in st.session_state:
+    df = st.session_state['df']
     # Aplicar filtros
     df_filtrado = df.copy()
     for coluna, operador, valor in filtros:
