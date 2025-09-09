@@ -49,7 +49,9 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
             stake_pct = st.number_input("💰 Stake (% da banca)", value=1.0, step=0.1) / 100
         with col3:
             banca_inicial = st.number_input("🏦 Banca Inicial", value=1000, step=100)
-
+            
+if 'df' in st.session_state:
+        df = st.session_state['df']
     # ========== Filtros Dinâmicos ===========
     filtros = []
     colunas_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
