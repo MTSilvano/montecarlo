@@ -33,6 +33,9 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
 
+if 'df' in st.session_state:
+    df = st.session_state['df']
+
     # ========== Seleção do método ===========
     metodos = [col for col in df.columns if "P/L" in col]
     metodo = st.selectbox("🎯 Selecione o método para análise:", metodos)
@@ -46,9 +49,6 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
         stake_pct = st.number_input("💰 Stake (% da banca)", value=1.0, step=0.1) / 100
     with col3:
         banca_inicial = st.number_input("🏦 Banca Inicial", value=1000, step=100)
-
-if 'df' in st.session_state:
-    df = st.session_state['df']
 
     # ========== Filtros Dinâmicos ===========
     filtros = []
