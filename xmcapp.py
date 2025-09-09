@@ -50,21 +50,21 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
         with col3:
             banca_inicial = st.number_input("🏦 Banca Inicial", value=1000, step=100)
 
-        # ========== Filtros Dinâmicos ===========
-        filtros = []
-        colunas_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
+    # ========== Filtros Dinâmicos ===========
+    filtros = []
+    colunas_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
 
-        with st.expander("🛠️ Clique para adicionar filtros"):
-            n_filtros = st.number_input("Quantos filtros deseja aplicar?", min_value=0, max_value=10, value=0, step=1)
-            for i in range(n_filtros):
-                col_f, op_f, val_f = st.columns([4, 2, 4])
-                with col_f:
-                    coluna = st.selectbox(f"Coluna {i+1}", colunas_numericas, key=f"coluna_{i}")
-                with op_f:
-                    operador = st.selectbox(f"Operador {i+1}", ["<=", ">=", "=="], key=f"operador_{i}")
-                with val_f:
-                    valor = st.number_input(f"Valor {i+1}", key=f"valor_{i}")
-                filtros.append((coluna, operador, valor))
+    with st.expander("🛠️ Clique para adicionar filtros"):
+        n_filtros = st.number_input("Quantos filtros deseja aplicar?", min_value=0, max_value=10, value=0, step=1)
+        for i in range(n_filtros):
+            col_f, op_f, val_f = st.columns([4, 2, 4])
+            with col_f:
+                coluna = st.selectbox(f"Coluna {i+1}", colunas_numericas, key=f"coluna_{i}")
+            with op_f:
+                operador = st.selectbox(f"Operador {i+1}", ["<=", ">=", "=="], key=f"operador_{i}")
+            with val_f:
+                valor = st.number_input(f"Valor {i+1}", key=f"valor_{i}")
+            filtros.append((coluna, operador, valor))
 
 if 'df' in st.session_state:
     df = st.session_state['df']
