@@ -1,11 +1,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 from io import BytesIO
 
 st.set_page_config(page_title="Monte Carlo Simulator Pro", layout="wide")
-
 st.title("🎯 Monte Carlo Simulator Pro")
 
 # =================== CABEÇALHO E UPLOADER =====================
@@ -17,7 +16,6 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
     )
     if csv_file:
         try:
-            # Tenta ler e processar o arquivo
             df = pd.read_csv(csv_file, sep=";")
             
             for col in df.columns:
@@ -51,6 +49,7 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
 
 if 'df' in st.session_state:
     df = st.session_state['df']
+
     # ========== Filtros Dinâmicos ===========
     filtros = []
     colunas_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
