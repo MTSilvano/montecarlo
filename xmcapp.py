@@ -51,7 +51,7 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
             banca_inicial = st.number_input("🏦 Banca Inicial", value=1000, step=100)
             
 if 'df' in st.session_state:
-        df = st.session_state['df']
+    df = st.session_state['df']
     # ========== Filtros Dinâmicos ===========
     filtros = []
     colunas_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
