@@ -46,10 +46,10 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
                 st.session_state['processed_file_name'] = csv_file.name
                 st.toast("✅ Arquivo carregado e processado com sucesso!")
 
-            except Exception as e:
-                st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
-                st.session_state['df'] = None
-                st.session_state['processed_file_name'] = None
+         except Exception as e:
+             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
+             st.session_state['df'] = None
+             st.session_state['processed_file_name'] = None
 
 with st.expander("Selecione opções da simulação"):
     if 'df' in st.session_state:
