@@ -1,11 +1,41 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import plotly.express as px
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 from io import BytesIO
+import base64
 
 st.set_page_config(page_title="Monte Carlo Simulator Pro", layout="wide")
-st.title("🎯 Monte Carlo Simulator Pro")
+st.header("Monte Carlo Simulator X")
+
+def criar_grafico_clicavel(fig, file_name):
+    """
+    Converte uma figura Matplotlib em uma imagem HTML clicável para download.
+    """
+    # Salva a figura em um buffer de memória
+    buf = BytesIO()
+    fig.savefig(buf, format="png", dpi=150)  # dpi=150 é um bom balanço para web
+    
+    # Codifica a imagem em Base64
+    img_base64 = base64.b64encode(buf.getvalue()).decode()
+    
+    # Cria o HTML para a imagem clicável
+    # O link <a> envolve a imagem <img>.
+    # 'href' contém os dados da imagem para visualização e download.
+    # 'download' especifica o nome do arquivo ao baixar.
+    html_code = f'''
+        <a href="data:image/png;base64,{img_base64}" download="{file_name}">
+            <img src="data:image/png;base64,{img_base64}" alt="{file_name}" style="width:100%;">
+        </a>
+    '''
+    
+    # Renderiza o HTML no Streamlit
+    st.markdown(html_code, unsafe_allow_html=True)
+    
+    # Fecha a figura para liberar memória
+    plt.close(fig)
 
 # =================== CABEÇALHO E UPLOADER =====================
 with st.expander("📂 Carregue ou troque o arquivo de análise"):
@@ -27,8 +57,7 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
             
             # Armazena o DataFrame limpo na memória da sessão
             st.session_state['df'] = df
-            
-            st.success("✅ Arquivo carregado e processado com sucesso!")
+            st.toast("✅ Arquivo carregado e processado com sucesso!", duration="short")
 
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
@@ -98,7 +127,10 @@ if 'df' in st.session_state:
     with col4:
         st.metric(label="Drawdown Máximo", value=f"-{drawdown_max_historico:.2f} stakes")
 
-    st.area_chart(saldos_cumulativos_com_inicio)
+    fig = go.Figure()
+    fig.add_trace(go.Scattergl(x=np.arange(len(saldos_cumulativos_com_inicio)), y=saldos_cumulativos_com_inicio, mode='lines', fill='tozeroy', name='Saldo Cumulativo'))
+    fig.update_layout(title="Lucro Acumulado", xaxis_title=None, yaxis_title=None, hovermode='x unified')
+    st.plotly_chart(fig, use_container_width=True)
 
     if n_apostas == 0:
         st.warning("❌ Nenhuma aposta encontrada com os filtros definidos.")
@@ -165,36 +197,22 @@ if 'df' in st.session_state:
                 ax1.plot(serie, alpha=0.01)
             ax1.axhline(0, color='black', linestyle='--')
             ax1.set_title(f"Monte Carlo - Evolução do Lucro ({n_simulacoes} Simulações)")
-            st.pyplot(fig1)
+            criar_grafico_clicavel(fig1, "evolucao_todas_simulacoes.png")
 
             piores_idx = np.argsort(lucros_finais)[:50]
             fig2, ax2 = plt.subplots(figsize=(10, 5))
             for serie in simulacoes[piores_idx]:
-                ax2.plot(serie, alpha=0.2)
+                            ax2.plot(serie, alpha=0.2)
             ax2.axhline(0, color='black', linestyle='--')
             ax2.set_title("Monte Carlo - Evolução do Lucro (50 Piores Simulações)")
-            st.pyplot(fig2)
+            criar_grafico_clicavel(fig2, "evolucao_50_piores.png")
 
             fig3, ax3 = plt.subplots(figsize=(8, 4))
-            ax3.hist(lucros_finais, bins=40, edgecolor='black')
+            ax3.hist(lucros_finais, bins=40)
             ax3.set_title(f"Distribuição do Lucro Final ({n_simulacoes} Simulações)")
-            st.pyplot(fig3)
+            criar_grafico_clicavel(fig3, "histograma_lucros_finais.png")
 
             fig4, ax4 = plt.subplots(figsize=(8, 4))
-            ax4.hist(drawdowns, bins=40, edgecolor='black')
+            ax4.hist(drawdowns, bins=40) # Adicionado cor para consistência
             ax4.set_title(f"Distribuição do Pior Drawdown ({n_simulacoes} Simulações)")
-            st.pyplot(fig4)
-
-            # ========== Download dos gráficos ==========
-            st.subheader("⬇️ Baixar Gráficos")
-            for fig, name in zip([fig1, fig2, fig3, fig4],
-                                 ["evolucao_todas_simulacoes.png", "evolucao_50_piores.png",
-                                  "histograma_lucros_finais.png", "histograma_drawdowns.png"]):
-                buf = BytesIO()
-                fig.savefig(buf, format="png", dpi=300)
-                st.download_button(
-                    label=f"📥 Baixar {name}",
-                    data=buf.getvalue(),
-                    file_name=name,
-                    mime="image/png"
-                )
+            criar_grafico_clicavel(fig4, "histograma_drawdowns.png")
