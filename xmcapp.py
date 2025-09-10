@@ -41,11 +41,17 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
                         df[col] = df[col].str.replace(",", ".").astype(float)
                     except (ValueError, AttributeError):
                         pass # Ignora colunas que não podem ser convertidas
-            # Armazena o DataFrame limpo na memória da sessão
-            st.session_state['df'] = df
-        except Exception as e:
-            st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
-    st.toast("✅ Arquivo carregado e processado com sucesso!", duration="short")
+                # Armazena o DataFrame limpo na memória da sessão
+                st.session_state['df'] = df
+                st.session_state['processed_file_name'] = csv_file.name
+                st.toast("✅ Arquivo carregado e processado com sucesso!")
+
+            except Exception as e:
+                st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
+                st.session_state['df'] = None
+                st.session_state['processed_file_name'] = None
+
+with st.expander("Selecione opções da simulação"):
     if 'df' in st.session_state:
         df = st.session_state['df']
 
