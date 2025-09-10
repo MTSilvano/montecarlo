@@ -26,7 +26,7 @@ def criar_grafico_clicavel(fig, file_name):
     plt.close(fig)
 
 # =================== CABEÇALHO E UPLOADER =====================
-with st.expander("📂 Carregue ou troque o arquivo de análise", expanded=st.session_state.expander_carregar_dados]):
+with st.expander("📂 Carregue ou troque o arquivo de análise", expanded=st.session_state.expander_carregar_dados):
     csv_file = st.file_uploader(
         "Selecione o arquivo CSV",
         type=["csv"],
