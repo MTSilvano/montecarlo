@@ -46,7 +46,7 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
 
-with st.expander("Selecione opções da simulação"):
+with st.expander("🎛️ Opções da simulação"):
     if 'df' in st.session_state:
         df = st.session_state['df']
         
@@ -70,7 +70,7 @@ if 'df' in st.session_state:
     filtros = []
     colunas_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
 
-    with st.expander("🛠️ Clique para adicionar filtros"):
+    with st.expander("🛠️ Filtros"):
         n_filtros = st.number_input("Quantos filtros deseja aplicar?", min_value=0, max_value=20, value=0, step=1)
         for i in range(n_filtros):
             col_f, op_f, val_f = st.columns([4, 2, 4])
