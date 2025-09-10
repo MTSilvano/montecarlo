@@ -26,9 +26,7 @@ def criar_grafico_clicavel(fig, file_name):
     plt.close(fig)
 
 # =================== CABEÇALHO E UPLOADER =====================
-if 'expander_carregar_dados' not in st.session_state:
-    st.session_state.expander_carregar_dados = True
-with st.expander("📂 Carregue ou troque o arquivo de análise", expanded=st.session_state.expander_carregar_dados):
+with st.expander("📂 Carregue ou troque o arquivo de análise"):
     csv_file = st.file_uploader(
         "Selecione o arquivo CSV",
         type=["csv"],
@@ -47,9 +45,6 @@ with st.expander("📂 Carregue ou troque o arquivo de análise", expanded=st.se
             st.session_state['df'] = df
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
-    if df is not None and st.session_state.expander_carregar_dados:
-        st.session_state.expander_carregar_dados = False
-        st.rerun
 
 with st.expander("Selecione opções da simulação"):
     if 'df' in st.session_state:
