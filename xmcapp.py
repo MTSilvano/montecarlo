@@ -33,7 +33,6 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
         label_visibility="collapsed"
     )
     if csv_file:
-        st.toast("✅ Arquivo carregado e processado com sucesso!", duration="short")
         try:
             df = pd.read_csv(csv_file, sep=";")
             for col in df.columns:
@@ -46,7 +45,7 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
             st.session_state['df'] = df
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
-
+    st.toast("✅ Arquivo carregado e processado com sucesso!", duration="short")
     if 'df' in st.session_state:
         df = st.session_state['df']
 
