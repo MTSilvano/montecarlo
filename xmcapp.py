@@ -33,20 +33,17 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
         label_visibility="collapsed"
     )
     if csv_file:
+        st.toast("✅ Arquivo carregado e processado com sucesso!", duration="short")
         try:
             df = pd.read_csv(csv_file, sep=";")
-            
             for col in df.columns:
                 if df[col].dtype == "object":
                     try:
                         df[col] = df[col].str.replace(",", ".").astype(float)
                     except (ValueError, AttributeError):
                         pass # Ignora colunas que não podem ser convertidas
-            
             # Armazena o DataFrame limpo na memória da sessão
             st.session_state['df'] = df
-            st.toast("✅ Arquivo carregado e processado com sucesso!", duration="short")
-
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
 
