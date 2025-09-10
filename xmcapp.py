@@ -116,7 +116,7 @@ if 'df' in st.session_state:
         st.metric(label="Drawdown Máximo", value=f"-{drawdown_max_historico:.2f} stakes")
 
     fig = go.Figure()
-    fig.add_trace(go.Scattergl(x=np.arange(len(saldos_cumulativos_com_inicio)), y=saldos_cumulativos_com_inicio, mode='lines', name='Saldo Cumulativo', line=dict(color='red', width=3, dash='solid')))
+    fig.add_trace(go.Scattergl(x=np.arange(len(saldos_cumulativos_com_inicio)), y=saldos_cumulativos_com_inicio, mode='lines', name='Saldo Cumulativo', line=dict(color='#AA0000', width=1, dash='solid')))
     fig.update_layout(title="Lucro Acumulado", xaxis_title=None, yaxis_title=None, hovermode='x unified')
     st.plotly_chart(fig, use_container_width=True)
 
