@@ -14,27 +14,15 @@ def criar_grafico_clicavel(fig, file_name):
     """
     Converte uma figura Matplotlib em uma imagem HTML clicável para download.
     """
-    # Salva a figura em um buffer de memória
     buf = BytesIO()
     fig.savefig(buf, format="png", dpi=150)  # dpi=150 é um bom balanço para web
-    
-    # Codifica a imagem em Base64
     img_base64 = base64.b64encode(buf.getvalue()).decode()
-    
-    # Cria o HTML para a imagem clicável
-    # O link <a> envolve a imagem <img>.
-    # 'href' contém os dados da imagem para visualização e download.
-    # 'download' especifica o nome do arquivo ao baixar.
     html_code = f'''
         <a href="data:image/png;base64,{img_base64}" download="{file_name}">
             <img src="data:image/png;base64,{img_base64}" alt="{file_name}" style="width:100%;">
         </a>
     '''
-    
-    # Renderiza o HTML no Streamlit
     st.markdown(html_code, unsafe_allow_html=True)
-    
-    # Fecha a figura para liberar memória
     plt.close(fig)
 
 # =================== CABEÇALHO E UPLOADER =====================
@@ -128,7 +116,7 @@ if 'df' in st.session_state:
         st.metric(label="Drawdown Máximo", value=f"-{drawdown_max_historico:.2f} stakes")
 
     fig = go.Figure()
-    fig.add_trace(go.Scattergl(x=np.arange(len(saldos_cumulativos_com_inicio)), y=saldos_cumulativos_com_inicio, mode='lines', fill='tozeroy', name='Saldo Cumulativo'))
+    fig.add_trace(go.Scattergl(x=np.arange(len(saldos_cumulativos_com_inicio)), y=saldos_cumulativos_com_inicio, mode='lines', name='Saldo Cumulativo'))
     fig.update_layout(title="Lucro Acumulado", xaxis_title=None, yaxis_title=None, hovermode='x unified')
     st.plotly_chart(fig, use_container_width=True)
 
