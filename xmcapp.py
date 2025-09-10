@@ -46,7 +46,7 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
 
-with st.expander("🎛️ Opções da simulação"):
+with st.expander("⚙️ Opções da simulação"):
     if 'df' in st.session_state:
         df = st.session_state['df']
         
