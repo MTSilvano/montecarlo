@@ -43,6 +43,8 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
                         pass
             # Armazena o DataFrame limpo na memória da sessão
             st.session_state['df'] = df
+            st.session_state['expander_open'] = False
+            st.rerun()
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
 
