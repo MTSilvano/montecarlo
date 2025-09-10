@@ -44,7 +44,7 @@ with st.expander("📂 Carregue ou troque o arquivo de análise"):
                 # Armazena o DataFrame limpo na memória da sessão
                 st.session_state['df'] = df
                 st.session_state['processed_file_name'] = csv_file.name
-                st.toast("✅ Arquivo carregado e processado com sucesso!")
+            st.toast("✅ Arquivo carregado e processado com sucesso!")
 
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
